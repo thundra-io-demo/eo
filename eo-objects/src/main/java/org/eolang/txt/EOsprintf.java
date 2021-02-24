@@ -21,37 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+package org.eolang.txt;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import org.eolang.phi.AtBound;
+import org.eolang.phi.AtFree;
+import org.eolang.phi.AtLambda;
+import org.eolang.phi.AtVararg;
+import org.eolang.phi.Data;
+import org.eolang.phi.Datarized;
+import org.eolang.phi.PhDefault;
+import org.eolang.phi.Phi;
 
 /**
- * Test case for {@link PhDefault}.
+ * Sprintf.
  *
- * @since 0.1
+ * @since 0.2
  */
-public final class PhDefaultTest {
+public class EOsprintf extends PhDefault {
 
-    @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
-        );
-    }
-
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+    public EOsprintf(final Phi parent) {
+        super(parent);
+        this.add("format", new AtFree());
+        this.add("args", new AtVararg());
+        this.add("φ", new AtBound(new AtLambda(this, self -> {
+            final String format = new Datarized(
+                self.attr("format").get()
+            ).take(String.class);
+            final Phi[] args = new Datarized(
+                self.attr("args").get()
+            ).take(Phi[].class);
+            final Collection<Object> items = new LinkedList<>();
+            for (final Phi arg : args) {
+                items.add(new Datarized(arg).take());
+            }
+            return new Data.Value<>(String.format(format, items.toArray()));
+        })));
     }
 
 }

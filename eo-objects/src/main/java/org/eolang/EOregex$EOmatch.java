@@ -21,37 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+package org.eolang;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.eolang.phi.AtBound;
+import org.eolang.phi.AtFree;
+import org.eolang.phi.AtLambda;
+import org.eolang.phi.Datarized;
+import org.eolang.phi.PhDefault;
+import org.eolang.phi.Phi;
 
 /**
- * Test case for {@link PhDefault}.
+ * REGEX.
  *
- * @since 0.1
+ * @since 0.2
  */
-public final class PhDefaultTest {
+public class EOregex$EOmatch extends PhDefault {
 
-    @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
-        );
-    }
-
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+    public EOregex$EOmatch(final Phi parent) {
+        super(parent);
+        this.add("txt", new AtFree());
+        this.add("φ", new AtBound(new AtLambda(this, self -> {
+            final Pattern pattern = new Datarized(
+                self.attr("ρ").get()
+            ).take(Pattern.class);
+            final String txt = new Datarized(
+                self.attr("txt").get()
+            ).take(String.class);
+            final Matcher matcher = pattern.matcher(txt);
+            if (matcher.matches()) {
+                final Phi[] dest = new Phi[matcher.groupCount()];
+                return new AsPhi(dest);
+            } else {
+                return new AsPhi(new Phi[] {});
+            }
+        })));
     }
 
 }

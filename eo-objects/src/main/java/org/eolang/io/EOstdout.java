@@ -21,37 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+package org.eolang.io;
+
+import org.eolang.phi.AtBound;
+import org.eolang.phi.AtFree;
+import org.eolang.phi.AtLambda;
+import org.eolang.phi.Data;
+import org.eolang.phi.Datarized;
+import org.eolang.phi.PhDefault;
+import org.eolang.phi.Phi;
 
 /**
- * Test case for {@link PhDefault}.
+ * Stdout.
  *
  * @since 0.1
  */
-public final class PhDefaultTest {
+public class EOstdout extends PhDefault {
 
-    @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
-        );
-    }
-
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+    public EOstdout(final Phi parent) {
+        super(parent);
+        this.add("text", new AtFree());
+        this.add("φ", new AtBound(new AtLambda(this, self -> {
+            System.out.print(
+                new Datarized(
+                    self.attr("text").get()
+                ).take(String.class)
+            );
+            return new Data.Value<>(true);
+        })));
     }
 
 }

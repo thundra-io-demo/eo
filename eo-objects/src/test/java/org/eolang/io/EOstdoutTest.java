@@ -21,37 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
+package org.eolang.io;
 
-import org.junit.jupiter.api.Assertions;
+import org.eolang.AsPhi;
+import org.eolang.phi.Datarized;
+import org.eolang.phi.PhCopy;
+import org.eolang.phi.PhEta;
+import org.eolang.phi.PhWith;
+import org.eolang.phi.Phi;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link PhDefault}.
+ * Test case for {@link EOstdout}.
  *
  * @since 0.1
  */
-public final class PhDefaultTest {
+public final class EOstdoutTest {
 
     @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
+    public void printsString() throws Exception {
+        final Phi format = new AsPhi("Hello, world!\n");
+        final Phi phi = new PhWith(
+            new PhCopy(new EOstdout(new PhEta())),
+            "text",
+            format
         );
-    }
-
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+        MatcherAssert.assertThat(
+            new Datarized(phi).take(Boolean.class),
+            Matchers.equalTo(true)
+        );
     }
 
 }

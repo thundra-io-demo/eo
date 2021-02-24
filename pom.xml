@@ -33,11 +33,12 @@ SOFTWARE.
   <artifactId>eo-parent</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>eo-parent</name>
+  <name>eolang</name>
   <modules>
     <module>eo-parser</module>
     <module>eo-maven-plugin</module>
     <module>eo-runtime</module>
+    <module>eo-objects</module>
   </modules>
   <description>EO Language</description>
   <url>https://github.com/cqfn/eo</url>

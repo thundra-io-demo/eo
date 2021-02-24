@@ -21,37 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
+package org.eolang.txt;
 
-import org.junit.jupiter.api.Assertions;
+import java.util.regex.Pattern;
+import org.eolang.AsPhi;
+import org.eolang.phi.Datarized;
+import org.eolang.phi.PhMethod;
+import org.eolang.phi.PhWith;
+import org.eolang.phi.Phi;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link PhDefault}.
+ * Test case for {@link EOregex$EOmatch}.
  *
  * @since 0.1
  */
-public final class PhDefaultTest {
+public final class EOregexEOmatchTest {
 
     @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
+    public void matchesString() throws Exception {
+        final Phi regex = new AsPhi(Pattern.compile("([a-z]+)"));
+        MatcherAssert.assertThat(
+            new Datarized(
+                new PhWith(
+                    new PhMethod(regex, "match"),
+                    "txt",
+                    new AsPhi("hello")
+                )
+            ).take(Phi[].class).length,
+            Matchers.equalTo(1)
         );
     }
 
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+    @Test
+    public void doesntMatchString() throws Exception {
+        final Phi regex = new AsPhi(Pattern.compile("([A-Z]{2})"));
+        MatcherAssert.assertThat(
+            new Datarized(
+                new PhWith(
+                    new PhMethod(regex, "match"),
+                    "txt",
+                    new AsPhi("Hello, World!")
+                )
+            ).take(Phi[].class).length,
+            Matchers.equalTo(0)
+        );
     }
 
 }

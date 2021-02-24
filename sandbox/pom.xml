@@ -28,7 +28,7 @@ SOFTWARE.
   <artifactId>quick-start</artifactId>
   <version>1.0-SNAPSHOT</version>
   <properties>
-    <eolang.version>0.1.15</eolang.version>
+    <eolang.version>0.1.24</eolang.version>
   </properties>
   <build>
     <plugins>
@@ -50,6 +50,8 @@ SOFTWARE.
               <goal>parse</goal>
               <goal>optimize</goal>
               <goal>compile</goal>
+              <goal>pull</goal>
+              <goal>resolve</goal>
             </goals>
             <configuration>
               <sourcesDir>${project.basedir}/eo</sourcesDir>

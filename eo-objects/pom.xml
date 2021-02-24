@@ -29,10 +29,52 @@ SOFTWARE.
     <artifactId>eo-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>eo-runtime</artifactId>
+  <artifactId>eo-objects</artifactId>
   <packaging>jar</packaging>
-  <name>eo-runtime</name>
-  <description>eolang runtime library</description>
+  <name>eo-objects</name>
+  <description>eolang objects</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.eolang</groupId>
+      <artifactId>eo-runtime</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eolang</groupId>
+        <artifactId>eo-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <goals>
+              <goal>parse</goal>
+              <goal>optimize</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>test-compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>parse</goal>
+              <goal>optimize</goal>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <sourcesDir>${project.basedir}/src/test/eo</sourcesDir>
+              <targetDir>${project.basedir}/target/eo-test</targetDir>
+              <addSourcesRoot>false</addSourcesRoot>
+              <addTestSourcesRoot>true</addTestSourcesRoot>
+              <generatedDir>${project.basedir}/target/generated-test-sources</generatedDir>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   <profiles>
     <profile>
       <id>qulice</id>

@@ -21,37 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
+package org.eolang;
 
-import org.junit.jupiter.api.Assertions;
+import org.eolang.phi.Data;
+import org.eolang.phi.Datarized;
+import org.eolang.phi.Phi;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link PhDefault}.
+ * Test case for {@link EOstring}.
  *
  * @since 0.1
  */
-public final class PhDefaultTest {
+public final class EOstringEOtrimTest {
 
     @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
+    public void trimsString() throws Exception {
+        final Phi str = new AsPhi("Hello, world!  ");
+        final Phi phi = new EOstring$EOtrim(str);
+        MatcherAssert.assertThat(
+            new Datarized(phi).take(String.class),
+            Matchers.equalTo("Hello, world!")
         );
-    }
-
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
     }
 
 }

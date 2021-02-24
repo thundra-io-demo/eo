@@ -21,37 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+package org.eolang;
+
+import org.eolang.phi.*;
 
 /**
- * Test case for {@link PhDefault}.
+ * DIV.
  *
- * @since 0.1
+ * @since 1.0
  */
-public final class PhDefaultTest {
+public class EOint$EOdiv extends PhDefault {
 
-    @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
-        );
-    }
-
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+    public EOint$EOdiv(final Phi parent) {
+        super(parent);
+        this.add("x", new AtFree());
+        this.add("φ", new AtBound(new AtLambda(this, self -> {
+            long ρ = new Datarized(self.attr("ρ").get()).take(Long.class);
+            long x = new Datarized(self.attr("x").get()).take(Long.class);
+            if (x == 0L) {
+                final Phi msg = new AsPhi("Division by zero is undefined");
+                return new PhWith(new org.eolang.EOerror(), "msg", msg);
+            }
+            return new AsPhi(Math.floorDiv(ρ, x));
+        })));
     }
 
 }

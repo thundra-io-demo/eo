@@ -48,7 +48,7 @@ public final class AtVararg implements Attr {
 
     @Override
     public Phi get() {
-        return new Data.ToPhi(this.array.toArray(new Phi[] {}));
+        return new Data.Value<>(this.array.toArray(new Phi[] {}));
     }
 
     @Override

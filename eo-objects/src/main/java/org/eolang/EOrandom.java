@@ -21,37 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+package org.eolang;
+
+import java.security.SecureRandom;
+import org.eolang.phi.AtBound;
+import org.eolang.phi.AtLambda;
+import org.eolang.phi.PhDefault;
+import org.eolang.phi.PhEta;
+import org.eolang.phi.Phi;
 
 /**
- * Test case for {@link PhDefault}.
+ * RANDOM.
  *
  * @since 0.1
  */
-public final class PhDefaultTest {
+public class EOrandom extends PhDefault {
 
-    @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
-        );
+    public EOrandom() {
+        this(new PhEta());
     }
 
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+    public EOrandom(final Phi parent) {
+        super(parent);
+        this.add("φ", new AtBound(new AtLambda(this, self -> new AsPhi(
+            new SecureRandom().nextDouble()
+        ))));
     }
 
 }

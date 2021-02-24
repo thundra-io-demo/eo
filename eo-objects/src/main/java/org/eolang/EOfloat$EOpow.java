@@ -21,37 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+package org.eolang;
+
+import org.eolang.phi.AtBound;
+import org.eolang.phi.AtFree;
+import org.eolang.phi.AtLambda;
+import org.eolang.phi.Data;
+import org.eolang.phi.Datarized;
+import org.eolang.phi.PhDefault;
+import org.eolang.phi.Phi;
+import org.eolang.phi.PhWith;
 
 /**
- * Test case for {@link PhDefault}.
+ * POW.
  *
- * @since 0.1
+ * @since 1.0
  */
-public final class PhDefaultTest {
+public class EOfloat$EOpow extends PhDefault {
 
-    @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
-        );
-    }
-
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+    public EOfloat$EOpow(final Phi parent) {
+        super(parent);
+        this.add("x", new AtFree());
+        this.add("φ", new AtBound(new AtLambda(this, self -> {
+            double ρ = new Datarized(self.attr("ρ").get()).take(Double.class);
+            double x = new Datarized(self.attr("x").get()).take(Double.class);
+            return new AsPhi(Math.pow(ρ, x));
+        })));
     }
 
 }

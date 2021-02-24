@@ -21,37 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.phi;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+package org.eolang;
+
+import org.eolang.phi.AtBound;
+import org.eolang.phi.AtFree;
+import org.eolang.phi.AtLambda;
+import org.eolang.phi.Data;
+import org.eolang.phi.Datarized;
+import org.eolang.phi.PhDefault;
+import org.eolang.phi.Phi;
 
 /**
- * Test case for {@link PhDefault}.
+ * MAPI.
  *
- * @since 0.1
+ * @since 1.0
  */
-public final class PhDefaultTest {
+public class EOarray$EOmapi extends PhDefault {
 
-    @Test
-    public void setsFreeAttributeOnlyOnce() throws Exception {
-        final Phi num = new Data.Value<>(42L);
-        final Phi phi = new PhDefaultTest.Foo(new PhEta());
-        phi.attr(0).put(num);
-        Assertions.assertThrows(
-            Attr.Exception.class,
-            () -> phi.attr(0).put(num)
-        );
-    }
-
-    public static class Foo extends PhDefault {
-         public Foo(final Phi parent) {
-             super(parent);
-             this.add("x", new AtFree());
-             this.add("φ", new AtBound(new AtLambda(
-                 self -> new Data.Value<>("Hello, world!")
-             )));
-        }
+    public EOarray$EOmapi(final Phi parent) {
+        super(parent);
+        this.add("f", new AtFree());
+        this.add("φ", new AtBound(new AtLambda(this, self -> {
+            final Phi[] array = new Datarized(
+                self.attr("ρ").get()
+            ).take(Phi[].class);
+            final Phi[] dest = new Phi[array.length];
+            for (int idx = 0; idx < array.length; ++idx) {
+                final Phi after = self.attr("f").get().copy();
+                after.attr(0).put(array[idx]);
+                after.attr(1).put(new AsPhi((long)idx));
+                dest[idx] = after;
+            }
+            return new AsPhi(dest);
+        })));
     }
 
 }

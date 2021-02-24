@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import org.eolang.EOstring;
 
 /**
  * Bridge between Java CLI and EO.
@@ -62,10 +61,8 @@ public final class Main {
             Class.forName(path).getConstructor().newInstance()
         );
         for (int idx = 1; idx < args.length; ++idx) {
-            final Phi phi = new EOstring();
             final String arg = args[idx];
-            phi.attr("Δ").put(new Data.Value<>(arg));
-            app.attr("args").put(phi);
+            app.attr("args").put(new Data.Value<>(arg));
         }
         if (!new Datarized(app).take(Boolean.class)) {
             throw new IllegalStateException(
