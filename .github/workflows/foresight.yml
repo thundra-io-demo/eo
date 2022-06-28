@@ -54,11 +54,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-result-junit
-          path: */target/
+          path: ./*/target/
 
       - name: Foresight Coverage Report Uploader
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: coverage-artifact
-          path: */target/site/jacoco/*.xml
+          path: ./*/target/site/jacoco/*.xml
