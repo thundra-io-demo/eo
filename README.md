@@ -15,6 +15,7 @@
 
 | Report Attribute  | Value   | 
 |---|---|
+| Language  | Java |
 | Test Framework  | Junit |
 | Test Report Format | JUnit |
 | Coverage Format | Jacoco / XML  |
