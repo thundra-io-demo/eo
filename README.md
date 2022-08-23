@@ -1,5 +1,5 @@
 
-## Foresight.io Demo Projects - EO 
+## runforesight.com Demo Projects - EO 
 
 
 <a href="https://foresight.thundra.live/repositories/github/runforesight-demo/eo/workflow-runs">
