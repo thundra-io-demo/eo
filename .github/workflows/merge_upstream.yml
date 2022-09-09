@@ -10,9 +10,9 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   UPSTREAM_BRANCH_NAME: master
   BRANCH_NAME: auto-upstream-merge
-  ORIGIN_PATH: thundra-io-demo/eo
+  ORIGIN_PATH: runforesight-demo/eo
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  GITHUB_USERNAME: thundra-io-demo
+  GITHUB_USERNAME: runforesight-demo
 
 jobs:
   merge_upstream:
